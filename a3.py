@@ -189,7 +189,6 @@ def title_by_actor(matches: List[str]) -> List[str]:
 def bye_action(dummy: List[str]) -> None:
     raise KeyboardInterrupt
 
-
 # The pattern-action list for the natural language query system A list of tuples of
 # pattern and action It must be declared here, after all of the function definitions
 pa_list: List[Tuple[List[str], Callable[[List[str]], List[Any]]]] = [
@@ -208,7 +207,6 @@ pa_list: List[Tuple[List[str], Callable[[List[str]], List[Any]]]] = [
     (["bye"], bye_action),
 ]
 
-
 def search_pa_list(source: List[str]) -> List[str]:
     """Takes source, finds matching pattern and calls corresponding action. If it finds
     a match but has no answers it returns ["No answers"]. If it finds no match it
@@ -221,42 +219,31 @@ def search_pa_list(source: List[str]) -> List[str]:
         a list of answers. Will be ["I don't understand"] if it finds no matches and
         ["No answers"] if it finds a match but no answers
     """
-    patterns: List[List[str]] = [
-        ["what movies were made in _"],
-        ["what movies were made between _ and _"],
-        ["what movies were made before _"],
-        ["what movies were made after _"],
-        ["who directed %]"],
-        ["who was the director of %"],
-        ["what movies were directed by %"],
-        ["who acted in %"],
-        ["when was % made"],
-        ["in what movies did % appear"],
-        ["bye"]
-    ]
     
     pattern: List[str] = []
-    for element in source:
-        # the year something was produced
-        if isinstance(int(element), int):
-            pattern.append("_")
-            continue
-        
-        # Need to distinguish actors and movie titles from everything else
-        if element[0].isupper():
-            if pattern[-1] == "%":
-                continue
-            pattern.append("%")
-            continue
-        
-        pattern.append(element)
+    for pattern_index in range(len(pa_list)):
+        pattern = pa_list[0][pattern_index]
 
+        print(pattern)
 
+        index = 0
+        for i, element in enumerate(pattern):
+            if element == "%" or element == "_":
+                index = i
+
+        # left_pattern = pattern[:index]
+        # left_source = source[:index]
+        
+        # print(left_pattern, left_source)
+
+        # if len(left_pattern) != len(left_source):
+        #     continue
+        
     result = match(pattern, source)
 
     if result is None:
         return ["I don't understand"]
-    if result == [""]:
+    if result == []:
         return ["No Answers"]
     
     return result
