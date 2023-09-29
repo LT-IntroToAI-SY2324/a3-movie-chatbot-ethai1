@@ -38,11 +38,9 @@ def get_year(movie: Tuple[str, str, int, List[str]]) -> int:
 def get_actors(movie: Tuple[str, str, int, List[str]]) -> List[str]:
     return movie[3]
 
-
 # Below are a set of actions. Each takes a list argument and returns a list of answers
 # according to the action and the argument. It is important that each function returns a
 # list of the answer(s) and not just the answer itself.
-
 
 def title_by_year(matches: List[str]) -> List[str]:
     """Finds all movies made in the passed in year
@@ -116,12 +114,8 @@ def director_by_title(matches: List[str]) -> List[str]:
     Returns:
         a list of 1 string, the director of the movie
     """
-    
-    directors: List[str] = []
-    for movie in movie_db:
-        if get_title(movie) == matches[0]:
-            directors.append(get_director(movie))
 
+    directors = [get_director(movie) for movie in movie_db if get_title(movie) == matches[0]]
     return directors
 
 def title_by_director(matches: List[str]) -> List[str]:
@@ -149,9 +143,7 @@ def actors_by_title(matches: List[str]) -> List[str]:
     
     actors: List[str] = []
     for movie in movie_db:
-        if get_title(movie) == matches[0]:
-            actors = get_actors(movie)
-            break
+        if get_title(movie) == matches[0]: return get_actors(movie)
 
     return actors
 
@@ -164,12 +156,8 @@ def year_by_title(matches: List[str]) -> List[int]:
     Returns:
         a list of one item (an int), the year that the movie was made
     """
-    
-    year_produced: List[int] = []
-    for movie in movie_db:
-        if get_title(movie) == matches[0]:
-            year_produced.append(get_year(movie))
 
+    year_produced = [get_year(movie) for movie in movie_db if get_title(movie) == matches[0]]
     return year_produced
 
 def title_by_actor(matches: List[str]) -> List[str]:
@@ -196,8 +184,6 @@ pa_list: List[Tuple[List[str], Callable[[List[str]], List[Any]]]] = [
     (str.split("what movies were made between _ and _"), title_by_year_range),
     (str.split("what movies were made before _"), title_before_year),
     (str.split("what movies were made after _"), title_after_year),
-    # note there are two valid patterns here two different ways to ask for the director
-    # of a movie
     (str.split("who directed %"), director_by_title),
     (str.split("who was the director of %"), director_by_title),
     (str.split("what movies were directed by %"), title_by_director),
@@ -221,33 +207,26 @@ def search_pa_list(source: List[str]) -> List[str]:
     """
     
     pattern: List[str] = []
+    result: Any = None
     for pattern_index in range(len(pa_list)):
-        pattern = pa_list[0][pattern_index]
+        pattern = pa_list[pattern_index][0]
 
-        print(pattern)
+        result = match(pattern, source)
 
-        index = 0
-        for i, element in enumerate(pattern):
-            if element == "%" or element == "_":
-                index = i
+        # switch different patterns, return different functions
+        if isinstance(result, list):
+            if len(result) == 0:
+                return ["No Answers"]
+            
+            arg = ""
+            if pattern_index == 0:
+                pass
 
-        # left_pattern = pattern[:index]
-        # left_source = source[:index]
-        
-        # print(left_pattern, left_source)
 
-        # if len(left_pattern) != len(left_source):
-        #     continue
-        
-    result = match(pattern, source)
-
-    if result is None:
-        return ["I don't understand"]
-    if result == []:
-        return ["No Answers"]
+            return pa_list[pattern_index][1](arg)
     
-    return result
-
+    return ["I don't understand"] 
+    
 def query_loop() -> None:
     """The simple query loop. The try/except structure is to catch Ctrl-C or Ctrl-D
     characters and exit gracefully.
