@@ -213,17 +213,33 @@ def search_pa_list(source: List[str]) -> List[str]:
 
         result = match(pattern, source)
 
-        # switch different patterns, return different functions
-        if isinstance(result, list):
-            if len(result) == 0:
-                return ["No Answers"]
-            
-            arg = ""
+        if isinstance(result, list):            
+            arg = []
             if pattern_index == 0:
-                pass
-
+                arg = [source[5]]
+            elif pattern_index == 1:
+                arg = [source[5], source[7]]
+            elif pattern_index == 2:
+                arg = [source[6]]
+            elif pattern_index == 3:
+                arg = [source[6]]
+            elif pattern_index == 4:
+                arg = [source[2]]
+            elif pattern_index == 5:
+                arg = [source[5]]
+            elif pattern_index == 6:
+                arg = [source[6]]
+            elif pattern_index == 7:
+                arg = [source[3]]
+            elif pattern_index == 8:
+                arg = [source[2]]
+            elif pattern_index == 9:
+                arg = [source[4]]
+            elif pattern_index == 10:
+                arg = [""]
 
             return pa_list[pattern_index][1](arg)
+            # return pa_list[pattern_index][1](arg) if pa_list[pattern_index][1](arg) != None else ["No Answers"]
     
     return ["I don't understand"] 
     
@@ -305,5 +321,22 @@ if __name__ == "__main__":
     assert sorted(
         search_pa_list(["what", "movies", "were", "made", "in", "2020"])
     ) == sorted(["No answers"]), "failed search_pa_list test 3"
+
+    # my own asserts
+    # assert sorted(search_pa_list(["who", "directed", "the", "dark", "knight"])) == sorted(
+    #     ["christopher nolan"]
+    # ), "failed search_pa_list NEW TEST 1"
+
+    # assert sorted(search_pa_list(["who", "acted", "in", "Black", "Panther"])) == sorted(
+    #     ["christopher nolan"]
+    # ), "failed search_pa_list NEW TEST 2"
+
+    assert sorted(search_pa_list(["when", "was", "your", "name", "made"])) == sorted(
+        [2016]
+    ), "failed search_pa_list YOUR NAME"
+
+    # assert sorted(search_pa_list(["what", "movies", "were", "made", "in", "2010"])) == sorted(
+    #     ["christopher nolan"]
+    # ), "failed search_pa_list NEW TEST 4"
 
     print("All tests passed!")

@@ -434,5 +434,17 @@ movie_db: List[Tuple[str, str, int, List[str]]] = [
             "delroy lindo",
             "spike lee",
         ],
+    ),
+    (
+        "your name"
+        "makoto shinkai",
+        2016,
+        [
+            "ryunosuke kamiki",
+            "mone kamishiraishi",
+            "ryo narita",
+            "aoi yûki",
+            "nobunaga shimazaki"
+        ]
     )
 ]
