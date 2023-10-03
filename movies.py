@@ -444,7 +444,7 @@ movie_db: List[Tuple[str, str, int, List[str]]] = [
             "mone kamishiraishi",
             "ryo narita",
             "aoi yûki",
-            "nobunaga shimazaki"
-        ]
-    )
+            "nobunaga shimazaki",
+        ],
+    ),
 ]

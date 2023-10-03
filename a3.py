@@ -86,8 +86,16 @@ def title_before_year(matches: List[str]) -> List[str]:
         pass in 1992 you won't get any movies made that year, only before)
     """
 
-    title_list = [get_title(movie) for movie in movie_db if get_year(movie) < int(matches[0])]
-    return title_list
+    result = []
+    for movie in movie_db:
+        if get_year(movie) < int(matches[0]):
+            result.append(get_title(movie))
+    # print(result)
+    return result
+
+
+    # title_list = [get_title(movie) for movie in movie_db if get_year(movie) < int(matches[0])]
+    # return title_list
 
 def title_after_year(matches: List[str]) -> List[str]:
     """Finds all movies made after the passed in year
@@ -190,6 +198,7 @@ pa_list: List[Tuple[List[str], Callable[[List[str]], List[Any]]]] = [
     (str.split("who acted in %"), actors_by_title),
     (str.split("when was % made"), year_by_title),
     (str.split("in what movies did % appear"), title_by_actor),
+    (str.split("% appeared in what movies"), title_by_actor),
     (["bye"], bye_action),
 ]
 
@@ -238,8 +247,8 @@ def search_pa_list(source: List[str]) -> List[str]:
             elif pattern_index == 10:
                 arg = [""]
 
-            return pa_list[pattern_index][1](arg)
-            # return pa_list[pattern_index][1](arg) if pa_list[pattern_index][1](arg) != None else ["No Answers"]
+            return pa_list[pattern_index][arg](arg)
+            # return pa_list[pattern_index][1](arg) if pa_list[pattern_index][1](arg) != [] else ["No Answers"]
     
     return ["I don't understand"] 
     
@@ -323,20 +332,9 @@ if __name__ == "__main__":
     ) == sorted(["No answers"]), "failed search_pa_list test 3"
 
     # my own asserts
-    # assert sorted(search_pa_list(["who", "directed", "the", "dark", "knight"])) == sorted(
-    #     ["christopher nolan"]
-    # ), "failed search_pa_list NEW TEST 1"
-
-    # assert sorted(search_pa_list(["who", "acted", "in", "Black", "Panther"])) == sorted(
-    #     ["christopher nolan"]
-    # ), "failed search_pa_list NEW TEST 2"
 
     assert sorted(search_pa_list(["when", "was", "your", "name", "made"])) == sorted(
         [2016]
     ), "failed search_pa_list YOUR NAME"
-
-    # assert sorted(search_pa_list(["what", "movies", "were", "made", "in", "2010"])) == sorted(
-    #     ["christopher nolan"]
-    # ), "failed search_pa_list NEW TEST 4"
 
     print("All tests passed!")
