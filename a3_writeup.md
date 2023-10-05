@@ -19,6 +19,6 @@ I would like to create a chatbot about games because I really like video games a
 The most difficult part for me was search_pa_list even though it was super short and simple because the other functions are relatively the same but for search_pa_list, I was struggling trying to figure out what to do and I also misused the match function and if I reviewd the match function more closely, I definitely would've gotten it.
 
 6. Did you write a new assert for your pattern action?
-Yes, however it breaks all of my code and I'm not sure why even though it resembles all the other asserts and I believe I correctly inserted the movie into the movie database.
+Yes, and it works perfectly.
 
 
